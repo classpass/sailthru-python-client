@@ -31,6 +31,7 @@ def sailthru_http_request(url, data, method, file_data=None, headers=None):
     """
     Perform an HTTP GET / POST / DELETE request
     """
+    DEFAULT_TIMEOUT_SECONDS = 20
     data = flatten_nested_hash(data)
     method = method.upper()
     params, data = (None, data) if method == 'POST' else (data, None)
@@ -41,7 +42,7 @@ def sailthru_http_request(url, data, method, file_data=None, headers=None):
     else:
         headers = sailthru_headers
     try:
-        response = requests.request(method, url, params=params, data=data, files=file_data, headers=headers, timeout=10)
+        response = requests.request(method, url, params=params, data=data, files=file_data, headers=headers, timeout=DEFAULT_TIMEOUT_SECONDS)
         return SailthruResponse(response)
     except requests.HTTPError as e:
         raise SailthruClientError(str(e))
